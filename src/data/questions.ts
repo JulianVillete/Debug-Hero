@@ -9,7 +9,7 @@ export type Question = {
 	choices?: string[]
 	answerIndex?: number
 	// fix mode
-	acceptedFixes?: { text: string; regex?: string }[]
+	acceptedFixes?: { text?: string; regex?: string }[]
 	points: number
 }
 
