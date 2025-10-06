@@ -27,11 +27,19 @@ npm run dev
 # open the URL from the terminal, e.g. http://localhost:5173
 ```
 
-Build (prod)
+ Build (prod)
 ```bash
 npm run build
 npm run preview
 ```
+
+ Deploy to Vercel
+ 1. Push the repo to GitHub (already done).
+ 2. Go to Vercel and import the repo `JulianVillete/Debug-Hero`.
+ 3. Framework Preset: Vite
+ 4. Build Command: `npm run build`
+ 5. Output Directory: `dist`
+ 6. Click Deploy. Your site will be live in seconds.
 
 Project Structure
 ```
