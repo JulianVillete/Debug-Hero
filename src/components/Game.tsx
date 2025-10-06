@@ -12,6 +12,15 @@ export function Game() {
 	const [index, setIndex] = useState<number>(0)
 	const [score, setScore] = useState<number>(0)
 	const [feedback, setFeedback] = useState<string>('')
+	const [showCongrats, setShowCongrats] = useState<boolean>(false)
+
+	const topics: Record<number, string> = {
+		1: 'JavaScript',
+		2: 'TypeScript',
+		3: 'React',
+		4: 'CSS',
+		5: 'Security',
+	}
 
 	const levelQuestions = useMemo(() => {
 		return questions
@@ -20,6 +29,25 @@ export function Game() {
 	}, [level, mode])
 
 	const current = levelQuestions[index]
+
+	function shuffleChoices(choices: string[], answerIndex: number) {
+		const arr = choices.map((text, idx) => ({ text, isCorrect: idx === answerIndex }))
+		for (let i = arr.length - 1; i > 0; i--) {
+			const j = Math.floor(Math.random() * (i + 1))
+			const tmp = arr[i]
+			arr[i] = arr[j]
+			arr[j] = tmp
+		}
+		const shuffled = arr.map(x => x.text)
+		const newAnswerIndex = arr.findIndex(x => x.isCorrect)
+		return { shuffled, newAnswerIndex }
+	}
+
+	const shuffledFind = useMemo(() => {
+		if (!current || mode !== 'find') return null
+		return shuffleChoices(current.choices!, current.answerIndex!)
+		// re-shuffle only when question changes
+	}, [current?.id, mode])
 
 	function onCorrect(points: number) {
 		setScore(prev => prev + points)
@@ -40,9 +68,14 @@ export function Game() {
 			setIndex(index + 1)
 			return
 		}
-		// next level or loop
-		setIndex(0)
-		setLevel(prev => (prev < 3 ? prev + 1 : 1))
+		// finished all questions at current level
+		if (level < 5) {
+			setIndex(0)
+			setLevel(level + 1)
+			return
+		}
+		// completed level 5: show modal
+		setShowCongrats(true)
 	}
 
 	return (
@@ -70,6 +103,7 @@ export function Game() {
 				</div>
 				<div className="status">
 					<span>Level {level}</span>
+					<span className="topic-badge">{topics[level]}</span>
 					<span>Score {score}</span>
 				</div>
 			</div>
@@ -80,9 +114,10 @@ export function Game() {
 					<CodeCard code={current.code} language={current.language} />
 					{mode === 'find' ? (
 						<ChoiceList
-							choices={current.choices!}
+							choices={shuffledFind ? shuffledFind.shuffled : current.choices!}
 							onSelect={i => {
-								if (i === current.answerIndex) onCorrect(current.points)
+								const correctIndex = shuffledFind ? shuffledFind.newAnswerIndex : current.answerIndex!
+								if (i === correctIndex) onCorrect(current.points)
 								else onWrong()
 							}}
 						/>
@@ -104,6 +139,27 @@ export function Game() {
 				</div>
 			) : (
 				<p>No questions for this level/mode.</p>
+			)}
+
+			{showCongrats && (
+				<div className="modal-backdrop" role="dialog" aria-modal="true">
+					<div className="modal">
+						<h3>Congratulations!</h3>
+						<p>For now this is only a demo — will be expanding soon :)<br />- Julian Villete</p>
+						<div className="actions">
+							<button
+								onClick={() => {
+									setShowCongrats(false)
+									setLevel(1)
+									setIndex(0)
+									setScore(0)
+								}}
+							>
+								Restart
+							</button>
+						</div>
+					</div>
+				</div>
 			)}
 		</div>
 	)

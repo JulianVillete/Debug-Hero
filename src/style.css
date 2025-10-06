@@ -40,14 +40,31 @@ h1 {
 .toolbar { display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin-bottom: 1rem; }
 .toolbar .modes button { margin-right: .5rem; }
 .status { display: flex; gap: 1rem; opacity: .9; }
+.topic-badge { padding: .15rem .5rem; border: 1px solid #3b82f6; border-radius: 999px; font-size: .85rem; color: #93c5fd; }
 .question h2 { margin: .5rem 0 1rem; font-size: 1.1rem; }
 .choices { display: grid; grid-template-columns: 1fr 1fr; gap: .5rem; }
-.choices button { text-align: left; }
+.choices button { text-align: left; min-height: 44px; }
 .code-card { text-align: left; }
 .fix-input { display: flex; gap: .5rem; margin-top: .5rem; }
 .feedback { margin-top: .5rem; font-weight: 600; }
 .feedback.ok { color: #4ade80; }
 .feedback.no { color: #f87171; }
+.code-card { overflow: auto; border-radius: 8px; }
+.code-card code { font-size: .95rem; }
+
+@media (max-width: 640px) {
+	#app { padding: 1rem; }
+	.toolbar { flex-wrap: wrap; gap: .5rem; }
+	.status { width: 100%; justify-content: space-between; }
+	.choices { grid-template-columns: 1fr; }
+	.fix-input { flex-direction: column; }
+	.fix-input button { width: 100%; min-height: 44px; }
+}
+.modal-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,0.6); display: grid; place-items: center; z-index: 50; }
+.modal { background: #111827; color: #e5e7eb; border: 1px solid #374151; border-radius: 12px; padding: 1.25rem 1rem; max-width: 440px; width: calc(100% - 2rem); box-shadow: 0 10px 40px rgba(0,0,0,0.4); }
+.modal h3 { margin: 0 0 .5rem; }
+.modal p { margin: 0 0 1rem; opacity: .9; }
+.modal .actions { display: flex; justify-content: flex-end; }
 
 .logo {
   height: 6em;
