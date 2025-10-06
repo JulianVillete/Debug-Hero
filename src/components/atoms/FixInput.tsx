@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 
 export function FixInput({ placeholder, onSubmit }: { placeholder?: string; onSubmit: (text: string) => void }) {
 	const [text, setText] = useState('')

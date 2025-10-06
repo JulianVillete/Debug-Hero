@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 import { CodeCard } from './atoms/CodeCard'
 import { ChoiceList } from './atoms/ChoiceList'
 import { FixInput } from './atoms/FixInput'
@@ -125,11 +125,11 @@ export function Game() {
 						<FixInput
 							placeholder="Type the fix..."
 							onSubmit={text => {
-								const ok = current.acceptedFixes!.some(accept =>
-									accept.regex
-										? new RegExp(accept.regex, 'i').test(text)
-									: accept.text.trim().toLowerCase() === text.trim().toLowerCase(),
-								)
+								const ok = current.acceptedFixes!.some(accept => {
+									if (accept.regex) return new RegExp(accept.regex, 'i').test(text)
+									if (accept.text) return accept.text.trim().toLowerCase() === text.trim().toLowerCase()
+									return false
+								})
 								if (ok) onCorrect(current.points)
 								else onWrong()
 							}}
